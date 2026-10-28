@@ -1,0 +1,224 @@
+<?php
+// Copy to ignored config.php for LOCAL DEMONSTRATION ONLY. Supply your own local DB account.
+define('DB_SERVER', '127.0.0.1');
+define('DB_USERNAME', '');
+define('DB_PASSWORD', '');
+define('DB_NAME', 'portfolio_demo');
+define('DEBUG_SAMPLE_DATA_ENABLED', false);
+define('TWO_FA_ENABLED', false); // This source snapshot has no 2FA verification route.
+define('SYSTEM_VERSION', 'public-demo');
+define('DEPED_REGION', 'Demo Region');
+define('DEPED_DIVISION', 'Demo Division');
+if (is_file(__DIR__ . '/vendor/autoload.php')) require_once __DIR__ . '/vendor/autoload.php';
+date_default_timezone_set('Asia/Manila');
+mysqli_report(MYSQLI_REPORT_ERROR | MYSQLI_REPORT_STRICT);
+try {
+    $conn = mysqli_connect(DB_SERVER, DB_USERNAME, DB_PASSWORD, DB_NAME);
+    mysqli_set_charset($conn, 'utf8mb4');
+    mysqli_query($conn, "SET time_zone = '+08:00'");
+} catch (Throwable $e) {
+    http_response_code(503);
+    exit('Local demo database unavailable. Complete README setup.');
+}
+
+if (!function_exists('csrf_token')) {
+    function csrf_token(): string
+    {
+        if (!isset($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token']) || $_SESSION['csrf_token'] === '') {
+            $_SESSION['csrf_token'] = bin2hex(random_bytes(32));
+        }
+
+        return $_SESSION['csrf_token'];
+    }
+}
+
+if (!function_exists('csrf_input')) {
+    function csrf_input(): string
+    {
+        $token = htmlspecialchars(csrf_token(), ENT_QUOTES, 'UTF-8');
+        return '<input type="hidden" name="csrf_token" value="' . $token . '">';
+    }
+}
+
+if (!function_exists('csrf_validate')) {
+    function csrf_validate(?string $token): bool
+    {
+        if (!isset($_SESSION['csrf_token']) || !is_string($_SESSION['csrf_token'])) {
+            return false;
+        }
+
+        if (!is_string($token) || $token === '') {
+            return false;
+        }
+
+        return hash_equals($_SESSION['csrf_token'], $token);
+    }
+}
+
+if (!function_exists('log_transaction')) {
+    function log_transaction(mysqli $conn, int $user_id, string $action_type, string $module, ?string $target_id, string $description): bool {
+        $stmt = $conn->prepare("INSERT INTO transaction_logs (user_id, action_type, module, target_id, description) VALUES (?, ?, ?, ?, ?)");
+        $stmt->bind_param("issss", $user_id, $action_type, $module, $target_id, $description);
+        return $stmt->execute();
+    }
+}
+
+// Role-based access control
+// superadmin: developer/Demo Support Team staff — full system access + dev tools
+// admin_office: main client admin — user mgmt, trash, logs, schools CRUD (no dev tools)
+// school_coordinator: write access, school + learner scoped
+// teacher: read/write access, assigned learners only
+if (!function_exists('user_is_admin')) {
+    function user_is_admin(string $role): bool {
+        return in_array($role, ['superadmin', 'admin_office'], true);
+    }
+}
+
+if (!function_exists('user_is_superadmin')) {
+    function user_is_superadmin(string $role): bool {
+        return $role === 'superadmin';
+    }
+}
+
+if (!function_exists('user_is_coordinator')) {
+    function user_is_coordinator(string $role): bool {
+        return in_array($role, ['superadmin', 'admin_office', 'school_coordinator', 'teacher'], true);
+    }
+}
+
+if (!function_exists('user_is_scoped')) {
+    function user_is_scoped(string $role): bool {
+        return in_array($role, ['school_coordinator', 'teacher'], true);
+    }
+}
+
+if (!function_exists('user_is_teacher')) {
+    function user_is_teacher(string $role): bool {
+        return $role === 'teacher';
+    }
+}
+
+if (!function_exists('check_teacher_learner_access')) {
+    function check_teacher_learner_access(mysqli $conn, string $lrn, bool $require_edit = false): bool {
+        $role = $_SESSION['role'] ?? '';
+        if (!user_is_scoped($role)) return true;
+        if (!preg_match('/^\d{12}$/', $lrn)) {
+            return false;
+        }
+
+        // Scoped users can view learners in their school.
+        $user_school_id = (int)($_SESSION['school_id'] ?? 0);
+        $stmt = $conn->prepare("SELECT COUNT(*) FROM enrollments WHERE lrn = ? AND school_id = ? AND is_deleted = 0 AND is_historical = 0");
+        $stmt->bind_param("si", $lrn, $user_school_id);
+        $stmt->execute();
+        $in_school = (int)$stmt->get_result()->fetch_row()[0] > 0;
+        if (!$in_school) {
+            return false;
+        }
+
+        // Teachers can edit only learners assigned to them; unassigned school learners remain view-only.
+        if (user_is_teacher($role) && $require_edit) {
+            $user_id = (int)($_SESSION['user_id'] ?? 0);
+            $stmt_assign = $conn->prepare("SELECT COUNT(*) FROM learner_teachers WHERE lrn = ? AND teacher_id = ?");
+            $stmt_assign->bind_param("si", $lrn, $user_id);
+            $stmt_assign->execute();
+            return (int)$stmt_assign->get_result()->fetch_row()[0] > 0;
+        }
+
+        return true;
+    }
+}
+
+if (!function_exists('get_teacher_scope_filter')) {
+    function get_teacher_scope_filter(string $alias = 'l'): string {
+        // Teachers now see all school learners — no additional scoping needed
+        return '';
+    }
+}
+
+if (!function_exists('get_school_scope_clause')) {
+    function get_school_scope_clause(string $alias = 'e'): string {
+        $role = $_SESSION['role'] ?? '';
+        if (user_is_scoped($role)) {
+            return " AND {$alias}.school_id = " . (int)($_SESSION['school_id'] ?? 0);
+        }
+        return '';
+    }
+}
+
+if (!function_exists('user_get_school_filter')) {
+    function user_get_school_filter(?int $user_school_id, string $role): string {
+        if (!user_is_scoped($role)) {
+            return '';
+        }
+        if ($user_school_id) {
+            return ' AND e.school_id = ' . intval($user_school_id);
+        }
+        return ' AND 1=0';
+    }
+}
+
+if (!function_exists('user_get_school_filter_learners')) {
+    function user_get_school_filter_learners(?int $user_school_id, string $role): string {
+        if (!user_is_scoped($role)) {
+            return '';
+        }
+        // All scoped roles (teacher, school_coordinator) use school enrollment check
+        if ($user_school_id) {
+            return ' AND e.school_id = ' . intval($user_school_id);
+        }
+        return ' AND 1=0';
+    }
+}
+
+if (!function_exists('validate_length')) {
+    function validate_length(string $value, int $max, string $field_label): ?string {
+        if (mb_strlen($value, 'UTF-8') > $max) {
+            return "{$field_label} exceeds maximum length of {$max} characters.";
+        }
+        return null;
+    }
+}
+
+if (!function_exists('get_principal_at')) {
+    function get_principal_at(mysqli $conn, int $school_id, string $as_of = 'today'): ?string {
+        if ($as_of === 'today') $as_of = (new DateTime())->format('Y-m-d');
+        $stmt = $conn->prepare("
+            SELECT principal_name
+            FROM school_principals
+            WHERE school_id = ? AND effective_from <= ? AND (effective_until IS NULL OR effective_until >= ?)
+            ORDER BY effective_from DESC
+            LIMIT 1
+        ");
+        $stmt->bind_param("iss", $school_id, $as_of, $as_of);
+        $stmt->execute();
+        $row = $stmt->get_result()->fetch_assoc();
+        return $row ? $row['principal_name'] : null;
+    }
+}
+
+if (!function_exists('get_current_principal')) {
+    function get_current_principal(mysqli $conn, int $school_id): ?string {
+        return get_principal_at($conn, $school_id, date('Y-m-d'));
+    }
+}
+
+if (!function_exists('school_year_options')) {
+    function school_year_options(?string $selected = null, bool $for_new_registration = false): string {
+        $cy = (int)date('Y');
+        $cm = (int)date('n');
+        $current_sy = ($cm >= 6) ? $cy . '-' . ($cy + 1) : ($cy - 1) . '-' . $cy;
+        if (!$selected) $selected = $current_sy;
+
+        $html = '';
+        $start_limit = $cy - 3;
+        $end_limit = $for_new_registration ? $cy : $cy + 5;
+        for ($start = $start_limit; $start <= $end_limit; $start++) {
+            $next = $start + 1;
+            $val = $start . '-' . $next;
+            $sel = ($val === $selected) ? ' selected' : '';
+            $html .= '<option value="' . htmlspecialchars($val, ENT_QUOTES) . '"' . $sel . '>SY ' . htmlspecialchars($val) . '</option>';
+        }
+        return $html;
+    }
+}

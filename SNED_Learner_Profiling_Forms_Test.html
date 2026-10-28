@@ -1,0 +1,1807 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Official DepEd SNED Learner Profiling Forms</title>
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+    -webkit-print-color-adjust: exact !important;
+    print-color-adjust: exact !important;
+  }
+
+  body {
+    font-family: Arial, sans-serif;
+    font-size: 9pt;
+    color: #000;
+    background: #6b7280;
+    line-height: 1.25;
+    padding: 20px 0;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 15px;
+  }
+
+  /* --- PAGE SETUP --- */
+  @page portrait {
+    size: A4 portrait;
+    margin: 0;
+  }
+
+  @page landscape {
+    size: A4 landscape;
+    margin: 0;
+  }
+
+  .page-portrait {
+    page: portrait;
+    width: 210mm;
+    min-height: 297mm;
+    background: #fff;
+    padding: 12mm 15mm;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    position: relative;
+    page-break-before: always;
+  }
+
+  .page-landscape {
+    page: landscape;
+    width: 297mm;
+    min-height: 210mm;
+    background: #fff;
+    padding: 8mm 10mm;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.25);
+    position: relative;
+    page-break-before: always;
+    display: flex;
+    gap: 15px;
+  }
+
+  .page-portrait:first-of-type, .page-landscape:first-of-type {
+    page-break-before: avoid;
+  }
+
+  .panel {
+    width: 50%;
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  @media print {
+    body {
+      background: none;
+      padding: 0;
+      display: block;
+    }
+    .page-portrait {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+    }
+    .page-landscape {
+      width: auto;
+      min-height: auto;
+      margin: 0;
+      padding: 0;
+      box-shadow: none;
+      display: flex;
+    }
+    .no-print {
+      display: none !important;
+    }
+  }
+
+  /* --- PRINT CONTROL BUTTON --- */
+  .print-btn {
+    position: fixed;
+    top: 15px;
+    right: 15px;
+    background: #000;
+    color: #fff;
+    border: 1px solid #000;
+    padding: 8px 16px;
+    font-size: 10pt;
+    font-weight: bold;
+    cursor: pointer;
+    z-index: 1000;
+    box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+  }
+  .print-btn:hover {
+    background: #333;
+  }
+
+  /* --- HEADER --- */
+  .letterhead {
+    text-align: center;
+    margin-bottom: 10px;
+    line-height: 1.2;
+  }
+  .republic-line {
+    font-size: 9pt;
+    font-weight: normal;
+  }
+  .deped-line {
+    font-size: 11pt;
+    font-weight: bold;
+  }
+  .header-logo-container {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 15px;
+    margin-bottom: 5px;
+  }
+  .header-logo {
+    height: 50px;
+    flex-shrink: 0;
+  }
+  .underline-fields-centered {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-bottom: 8px;
+    gap: 2px;
+  }
+  .underline-row {
+    display: flex;
+    align-items: flex-end;
+    width: 280px;
+    font-size: 9pt;
+  }
+  .underline-label {
+    font-weight: normal;
+    white-space: nowrap;
+  }
+  .underline-line {
+    border-bottom: 1px solid #000;
+    flex-grow: 1;
+    margin-left: 5px;
+    height: 12px;
+  }
+
+  /* --- TITLES & LABELS --- */
+  .form-title {
+    text-align: center;
+    font-weight: bold;
+    font-size: 11pt;
+    text-transform: uppercase;
+    border: 2px solid #000;
+    padding: 5px;
+    margin-bottom: 8px;
+  }
+  .section-label {
+    background: #d9d9d9;
+    border: 1px solid #000;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 9.5pt;
+    padding: 3px 5px;
+    margin-top: 8px;
+    margin-bottom: 5px;
+  }
+  .part-label {
+    text-align: center;
+    font-weight: bold;
+    margin: 5px 0;
+    font-size: 10pt;
+  }
+
+  /* --- FIELDS AND WRITE LINES --- */
+  .field-row {
+    display: flex;
+    gap: 12px;
+    margin-bottom: 5px;
+    align-items: flex-end;
+  }
+  .field-item {
+    display: flex;
+    align-items: flex-end;
+    gap: 4px;
+    flex: 1;
+  }
+  .field-item label {
+    font-weight: bold;
+    font-size: 8.5pt;
+    white-space: nowrap;
+  }
+  .field-line {
+    border-bottom: 1px solid #000;
+    height: 14px;
+    flex-grow: 1;
+  }
+  .write-line {
+    border-bottom: 1px solid #000;
+    width: 100%;
+    height: 14px;
+    margin-top: 2px;
+  }
+  .writing-box {
+    border: 1px solid #000;
+    min-height: 55px;
+    margin-top: 3px;
+    margin-bottom: 6px;
+    padding: 4px;
+  }
+
+  /* --- TABLES --- */
+  table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 8.5pt;
+    margin-top: 4px;
+    margin-bottom: 6px;
+  }
+  table th, table td {
+    border: 1px solid #000;
+    padding: 3px 4px;
+    vertical-align: middle;
+  }
+  table th {
+    background: #d9d9d9;
+    font-weight: bold;
+    text-align: center;
+  }
+  .cell-center {
+    text-align: center;
+  }
+  .cell-tall {
+    height: 30px;
+  }
+  .cell-xtall {
+    height: 50px;
+  }
+
+  /* --- CHECKBOXES --- */
+  .check-box {
+    width: 11px;
+    height: 11px;
+    border: 1px solid #000;
+    display: inline-block;
+    vertical-align: middle;
+    margin-right: 3px;
+    flex-shrink: 0;
+  }
+  .checkbox-item {
+    display: inline-flex;
+    align-items: center;
+    font-size: 9pt;
+  }
+
+  /* --- DOMAIN MATRIX (ANNEX 2) --- */
+  .domain-section h2 {
+    font-size: 8pt;
+    text-transform: uppercase;
+    margin-bottom: 4px;
+    background: #d9d9d9;
+    padding: 2px;
+    border: 1px solid #000;
+    text-align: center;
+    font-weight: bold;
+  }
+  .domain-table th {
+    font-size: 7.5pt;
+  }
+  .domain-table td {
+    font-size: 7.5pt;
+  }
+  .domain-table .indicator-col {
+    text-align: left;
+    width: 80%;
+  }
+  .domain-table .q-col {
+    width: 5%;
+    text-align: center;
+    font-weight: bold;
+  }
+  .domain-table .subdomain-row {
+    font-weight: bold;
+    font-style: italic;
+    background: #f5f5f5;
+  }
+
+  /* --- ITP MULTI-COLUMN BOXES --- */
+  .domain-grid-2col {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 6px;
+    margin-bottom: 6px;
+  }
+  .domain-box {
+    border: 1px solid #000;
+    padding: 5px;
+  }
+  .domain-box-title {
+    background: #d9d9d9;
+    font-weight: bold;
+    text-transform: uppercase;
+    font-size: 8.5pt;
+    padding: 2px 4px;
+    margin: -5px -5px 5px -5px;
+    border-bottom: 1px solid #000;
+  }
+  .domain-label {
+    font-weight: bold;
+    font-size: 8.5pt;
+    margin-top: 4px;
+    display: block;
+  }
+
+  /* --- OTHER HELPERS --- */
+  .footer-page {
+    position: absolute;
+    right: 15mm;
+    bottom: 8mm;
+    font-size: 8.5pt;
+    color: #444;
+  }
+  .annex-kicker {
+    display: flex;
+    justify-content: space-between;
+    font-size: 9pt;
+    margin-bottom: 5px;
+  }
+</style>
+</head>
+<body>
+
+<button class="print-btn no-print" onclick="window.print()">🖨 Print / Save PDF</button>
+
+<!-- ==========================================================
+     ANNEX 1: INDIVIDUAL LEARNER'S PROFILE - PAGE 1
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="annex-kicker"><span>Page 1 of 2</span></div>
+  <div class="header-logo-container">
+    <img src="deped_logo.webp" alt="DepEd Logo" class="header-logo">
+    <div class="text-box">
+      <div class="republic-line">Republic of the Philippines</div>
+      <div class="deped-line">Department of Education</div>
+    </div>
+    <div style="width: 50px;"></div>
+  </div>
+  <div class="underline-fields-centered">
+    <div class="underline-row"><span class="underline-label">Region:</span> <span class="underline-line"></span></div>
+    <div class="underline-row"><span class="underline-label">Division:</span> <span class="underline-line"></span></div>
+    <div class="underline-row"><span class="underline-label">District:</span> <span class="underline-line"></span></div>
+    <div class="underline-row"><span class="underline-label">School:</span> <span class="underline-line"></span></div>
+  </div>
+
+  <div class="part-label">PART 1</div>
+  <div class="form-title">Individual Learner's Profile</div>
+
+  <div class="field-row">
+    <div class="field-item" style="flex: 2;">
+      <label>Name:</label>
+      <div class="field-line">JOHN ALBERT D. DELA CRUZ</div>
+    </div>
+    <div class="field-item" style="width: 180px;">
+      <label>Date of Birth:</label>
+      <div class="field-line">October 12, 2015</div>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field-item" style="width: 100px;">
+      <label>Age:</label>
+      <div class="field-line">10</div>
+    </div>
+    <div class="field-item" style="flex: 1;">
+      <label>LRN:</label>
+      <div class="field-line">123456789012</div>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field-item" style="flex: 1;">
+      <label>Type of Learner:</label>
+      <div class="field-line">Self-Contained (ASD)</div>
+    </div>
+    <div class="field-item" style="flex: 1;">
+      <label>School Year:</label>
+      <div class="field-line">2025-2026</div>
+    </div>
+  </div>
+
+  <div class="field-row">
+    <div class="field-item" style="flex: 1;">
+      <label>Grade / Level:</label>
+      <div class="field-line">Grade 3 - SPED</div>
+    </div>
+    <div class="field-item" style="flex: 1;">
+      <label>Adviser:</label>
+      <div class="field-line">Mrs. Maria S. Santos</div>
+    </div>
+  </div>
+
+  <div class="section-label">Record of Assessments</div>
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Type of Assessments</th>
+        <th style="width: 20%;">Date Administered</th>
+        <th style="width: 18%;">Chronological Age</th>
+        <th style="width: 18%;">Administrator</th>
+        <th>Results / Outcome</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td class="cell-tall">Cognitive &amp; Behavioral Assessment</td>
+        <td>November 15, 2024</td>
+        <td>9 years, 1 month</td>
+        <td>Dr. Alicia V. Reyes (DevPed)</td>
+        <td>Diagnosed with Autism Spectrum Disorder (Level 2). Requires self-contained special education class with structural interventions.</td>
+      </tr>
+      <tr>
+        <td class="cell-tall">Speech &amp; Language Evaluation</td>
+        <td>January 18, 2025</td>
+        <td>9 years, 3 months</td>
+        <td>Mr. Robert G. Cruz (SLP)</td>
+        <td>Manifests moderate expressive language delay and echolalia. Recommended speech therapy sessions twice a week.</td>
+      </tr>
+      <tr>
+        <td class="cell-tall">Adaptive Behavior Assessment (ABAS-3)</td>
+        <td>May 05, 2025</td>
+        <td>9 years, 7 months</td>
+        <td>Mrs. Maria S. Santos</td>
+        <td>Scores indicate significant deficits in social, communication, and self-care conceptual domains.</td>
+      </tr>
+      <tr>
+        <td class="cell-tall">&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+        <td>&nbsp;</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">Interview with Parents/Guardian</div>
+  <div class="field-row">
+    <div class="field-item" style="flex: 1;">
+      <label>Name of Parent/Guardian:</label>
+      <div class="field-line">Mr. Fernando A. Dela Cruz</div>
+    </div>
+    <div class="field-item" style="width: 180px;">
+      <label>Date of Interview:</label>
+      <div class="field-line">June 04, 2025</div>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field-item" style="flex: 1;">
+      <label>Contact Number/s:</label>
+      <div class="field-line">0917-1234567</div>
+    </div>
+  </div>
+  <div class="field-row">
+    <div class="field-item" style="flex: 1;">
+      <label>Home Address:</label>
+      <div class="field-line">124 Rizal St., Barangay Poblacion, Valenzuela City</div>
+    </div>
+  </div>
+
+  <div style="font-weight: bold; font-size: 9pt; margin-top: 6px; margin-bottom: 2px;">Developmental and Educational History:</div>
+  <div class="writing-box">
+    <div class="write-line">The learner was born full term with no medical complications. Parents noticed delays in speech and social interaction at 18 months.</div>
+    <div class="write-line">He was diagnosed with ASD at age 4. He attended a private early intervention center for two years and has been enrolled in SPED since 2022.</div>
+    <div class="write-line">He has shown improvements in basic toileting and school routines, but struggles with verbal communication and sudden changes.</div>
+    </div>
+    <div class="write-line"></div>
+    <div class="write-line"></div>
+  </div>
+
+  <div class="section-label">Interview with the Learner</div>
+  <div class="field-row">
+    <div class="field-item" style="width: 180px;">
+      <label>Date of Interview:</label>
+      <div class="field-line">June 05, 2025</div>
+    </div>
+    <div class="field-item" style="flex: 1;">
+      <label>Interests / Hobbies / Talents:</label>
+      <div class="field-line">Drawing, arranging colorful blocks, playing with water, listening to simple melodies, and solving puzzles.</div>
+    </div>
+  </div>
+
+  <div class="footer-page">1 | Page</div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 1: INDIVIDUAL LEARNER'S PROFILE - PAGE 2
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="annex-kicker"><span>Page 2 of 2</span></div>
+  <div class="header-logo-container">
+    <img src="deped_logo.webp" alt="DepEd Logo" class="header-logo">
+    <div class="text-box">
+      <div class="republic-line">Republic of the Philippines</div>
+      <div class="deped-line">Department of Education</div>
+    </div>
+    <div style="width: 50px;"></div>
+  </div>
+  <div class="underline-fields-centered">
+    <div class="underline-row"><span class="underline-label">School:</span> <span class="underline-line"></span></div>
+  </div>
+
+  <div class="part-label">PART 2</div>
+  <div class="form-title">Functional Narrative Profile</div>
+
+  <table>
+    <thead>
+      <tr>
+        <th style="width: 25%;">Learning Domain</th>
+        <th style="width: 38%;">Strengths</th>
+        <th style="width: 37%;">Needs</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="font-weight: bold;">Daily Living Skills Domain</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Language Development Domain</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Psychomotor Domain</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Cognitive Domain</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Aesthetic and Creative Domain</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Behavioral Development</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold;">Orientation and Mobility</td>
+        <td class="cell-tall"></td>
+        <td></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label" style="margin-top: 5px;">Priority Learning Needs/Interventions:</div><table><tbody>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">1.</td><td>Expressing basic personal needs (toilet, water, hunger) using PECS picture cards.</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">2.</td><td>Improving fine motor skills specifically for proper pencil grip and copying simple shapes.</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">3.</td><td>Enhancing self-care independence in dressing (buttoning/zipping) and hygiene.</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">4.</td><td>Reducing self-stimulatory behaviors (vocal/motor) through sensory breaks.</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">5.</td><td>Developing basic sight-word reading and number values up to 10.</td></tr>
+    </tbody></table>
+  </table>
+
+  <div class="section-label" style="margin-top: 5px;">Transition Package:</div><table><tbody>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">1.</td><td>Care Skills (bathing, dressing, grooming)</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">2.</td><td>Life Skills (personal safety and basic self-advocacy)</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">3.</td><td>Functional Academics (recognizing warning signs and simple labels)</td></tr>
+      <tr><td style="width: 6%; text-align: center; font-weight: bold;">4.</td><td>Pre-Vocational Skills (sorting and organizing classroom materials)</td></tr>
+    </tbody></table>
+  </table>
+
+  <div style="font-weight: bold; font-size: 8.5pt; margin-top: 4px;">Transition Interests:</div><div class="writing-box"><div class="write-line">Shows high interest in visual tasks, sorting items by color and shape, and using educational games on tablet.</div><div class="write-line">Enjoys mechanical activities like assembling puzzle blocks and cleaning up tables.</div></div><div class="write-line"></div></div>
+
+  <div style="font-weight: bold; font-size: 8.5pt; margin-top: 4px;">Enabling Skills &amp; Interventions:</div><div class="writing-box"><div class="write-line">Introduce vocational task boxes (sorting, packaging, folding). Use token economy to reinforce task completion.</div><div class="write-line">Implement structured work systems with visual guidelines.</div></div><div class="write-line"></div></div>
+
+  <div style="font-weight: bold; font-size: 8.5pt; margin-top: 4px;">Parent Concerns / Additional Notes:</div><div class="writing-box"><div class="write-line">Parents are highly concerned about the learner\'s safety when outside the home due to a lack of danger awareness.</div><div class="write-line">They hope he can learn to communicate his name and address in case of emergency.</div></div><div class="write-line"></div></div>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 30px; margin-top: 20px; text-align: center;">
+    <div>
+      <div style="border-bottom: 1px solid #000; height: 16px;"></div>
+      <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">Adviser / Teacher</div>
+    </div>
+    <div>
+      <div style="border-bottom: 1px solid #000; height: 16px;">Mrs. Maria S. Santos</div>
+      <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">Parent / Guardian</div>
+      Mr. Fernando A. Dela Cruz
+    </div>
+  </div>
+  <div class="footer-page">2 | Page</div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 2: PROGRESS REPORT CARD - COVER SPREAD
+     ========================================================== -->
+<div class="page-landscape">
+  <!-- LEFT PANEL (Attendance, Guides, Remarks, Signatures) -->
+  <div class="panel">
+    <div class="section-label" style="margin-top:0;">ATTENDANCE RECORD</div>
+    <table class="attendance-table" style="font-size: 7pt; text-align: center;">
+      <thead>
+        <tr>
+          <th style="text-align: left; width: 28%;">&nbsp;</th>
+          <th>June</th><th>July</th><th>Aug</th><th>Sept</th><th>Oct</th><th>Nov</th><th>Dec</th><th>Jan</th><th>Feb</th><th>Mar</th><th>Apr</th><th>Total</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td style="text-align: left; font-weight: bold;">No. of School Days</td><td>20</td><td>22</td><td>21</td><td>20</td><td>22</td><td>18</td><td>15</td><td>20</td><td>21</td><td>22</td><td>19</td><td>220</td></tr>
+        <tr><td style="text-align: left; font-weight: bold;">Days Present</td><td>19</td><td>21</td><td>20</td><td>18</td><td>21</td><td>17</td><td>14</td><td>19</td><td>20</td><td>21</td><td>18</td><td>208</td></tr>
+        <tr><td style="text-align: left; font-weight: bold;">Days Absent</td><td>1</td><td>1</td><td>1</td><td>2</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>1</td><td>12</td></tr>
+    </tbody>
+    </table>
+
+    <div class="section-label" style="margin-top:2px;">GUIDE FOR RATING</div>
+    <table style="font-size: 7pt;">
+      <thead>
+        <tr>
+          <th style="width: 12%;">SYMBOL</th>
+          <th style="width: 28%;">Description</th>
+          <th>EXPLANATION</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td class="cell-center" style="font-weight:bold;">P</td><td>Proficient</td><td>The child always manifests the skills</td></tr>
+        <tr><td class="cell-center" style="font-weight:bold;">AP</td><td>Approaching Proficiency</td><td>The child manifests the skills most of the time</td></tr>
+        <tr><td class="cell-center" style="font-weight:bold;">D</td><td>Developing</td><td>The child sometimes manifests the skills</td></tr>
+        <tr><td class="cell-center" style="font-weight:bold;">B</td><td>Beginning</td><td>The child seldom manifests the skills</td></tr>
+        <tr><td class="cell-center" style="font-weight:bold;">NO/NA</td><td>Not Observed / Not Applicable</td><td>No manifestation of skills at all / Not Applicable</td></tr>
+      </tbody>
+    </table>
+
+    <div class="section-label" style="margin-top:2px;">TEACHER'S REMARKS</div>
+    <table style="font-size: 7.5pt;">
+      <thead>
+        <tr><th style="width: 18%;">QUARTER</th><th>REMARKS</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="cell-center">1st</td><td style="height: 18px;">John has adjusted well to class routines. Speaks single words to request items.</td></tr>
+        <tr><td class="cell-center">2nd</td><td style="height: 18px;">Shows improvement in puzzle tasks and block design. Social interaction remains limited.</td></tr>
+        <tr><td class="cell-center">3rd</td><td style="height: 18px;">Speech therapy shows positive impact. Follows multi-step visual routines reliably.</td></tr>
+        <tr><td class="cell-center">4th</td><td style="height: 18px;">John has developed basic handwashing and sorting independence. Ready for promotion.</td></tr>
+    </tbody>
+    </table>
+
+    <div class="section-label" style="margin-top:2px;">PARENT'S/ GUARDIAN'S COMMENTS AND SIGNATURE</div>
+    <table style="font-size: 7.5pt;">
+      <thead>
+        <tr><th style="width: 18%;">QUARTER</th><th>COMMENTS</th><th style="width: 25%;">SIGNATURE</th></tr>
+      </thead>
+      <tbody>
+        <tr><td class="cell-center">1st</td><td style="height: 18px;">We are happy John likes going to school.</td><td><span style="font-size:7pt;">F. Dela Cruz</span></td></tr>
+        <tr><td class="cell-center">2nd</td><td style="height: 18px;">John uses PECS cards at home now.</td><td><span style="font-size:7pt;">F. Dela Cruz</span></td></tr>
+        <tr><td class="cell-center">3rd</td><td style="height: 18px;">Speech is clearer, he says "water please".</td><td><span style="font-size:7pt;">F. Dela Cruz</span></td></tr>
+        <tr><td class="cell-center">4th</td><td style="height: 18px;">Very satisfied with John's growth. Thank you.</td><td><span style="font-size:7pt;">F. Dela Cruz</span></td></tr>
+    </tbody>
+    </table>
+  </div>
+
+  <!-- RIGHT PANEL (Cover, Signatures, Certificate of Transfer) -->
+  <div class="panel">
+    <div style="display: flex; align-items: center; justify-content: center; gap: 8px; margin-bottom: 5px;">
+      <div class="text-box" style="line-height: 1.1;">
+        <div style="font-size: 7.5pt;">Republic of the Philippines</div>
+        <div style="font-size: 9.5pt; font-weight: bold;">Department of Education</div>
+        <div style="font-size: 8pt;">National Capital Region</div>
+        <div style="font-size: 8pt;">Schools Division Office of Valenzuela City</div>
+      </div>
+      <img src="deped_logo.webp" alt="DepEd Logo" style="height: 38px;">
+    </div>
+
+    <div class="field-row" style="margin-bottom: 2px;">
+      <div class="field-item" style="flex: 1;"><label style="font-size:8pt;">District:</label><div class="field-line">District II</div></div>
+      <div class="field-item" style="flex: 1.5;"><label style="font-size:8pt;">School:</label><div class="field-line">Valenzuela SPED Center</div></div>
+    </div>
+    <div class="field-row" style="margin-bottom: 4px;">
+      <div class="field-item" style="flex: 1;"><label style="font-size:8pt;">School Address:</label><div class="field-line">124 Rizal St., Barangay Poblacion, Valenzuela City</div></div>
+    </div>
+
+    <h1 style="text-align: center; font-size: 12pt; margin: 4px 0; font-weight: bold; text-transform: uppercase;">PROGRESS REPORT CARD</h1>
+
+    <div class="field-row" style="margin-bottom: 2px;">
+      <div class="field-item" style="flex: 1;"><label style="font-size:8pt;">Name:</label><div class="field-line">JOHN ALBERT D. DELA CRUZ</div></div>
+    </div>
+    <div class="field-row" style="margin-bottom: 2px;">
+      <div class="field-item" style="width: 80px;"><label style="font-size:8pt;">Age:</label><div class="field-line">10</div></div>
+      <div class="field-item" style="flex: 1;"><label style="font-size:8pt;">Date of Birth:</label><div class="field-line">October 12, 2015</div></div>
+      <div class="field-item" style="width: 80px;"><label style="font-size:8pt;">Sex:</label><div class="field-line">Male</div></div>
+    </div>
+    <div class="field-row" style="margin-bottom: 2px;">
+      <div class="field-item" style="flex: 1;"><label style="font-size:8pt;">S.Y.:</label><div class="field-line">2025-2026</div></div>
+      <div class="field-item" style="flex: 1.5;"><label style="font-size:8pt;">LRN:</label><div class="field-line">123456789012</div></div>
+    </div>
+    <div class="field-row" style="margin-top: 3px; margin-bottom: 3px;">
+      <div class="field-item" style="font-size: 8pt;">
+        <label>Assessment:</label>
+        <span class="checkbox-item" style="margin-left: 10px;"><span class="check-box">✓</span> With</span>
+        <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> Without</span>
+      </div>
+    </div>
+
+    <div class="writing-box" style="min-height: 48px; font-size: 7.5pt; line-height: 1.3; margin-bottom: 4px; padding: 4px;">
+      <strong>Dear Parents/Guardian,</strong><br>
+      This report card is designed to show your child's progress in the different learning areas of development and character formation. The school welcomes you to confer with the teacher/principal so that we may best understand your child's special educational needs.
+    </div>
+
+    <div style="display: flex; justify-content: space-around; margin-top: 3px; text-align: center;">
+      <div style="width: 45%;">
+        <div style="border-bottom: 1px solid #000; height: 12px;">Dr. Leonardo R. Martinez</div>
+        <span style="font-size: 7pt; color:#333;">Principal</span>
+      </div>
+      <div style="width: 45%;">
+        <div style="border-bottom: 1px solid #000; height: 12px;">Mrs. Maria S. Santos</div>
+        <span style="font-size: 7pt; color:#333;">Teacher</span>
+      </div>
+    </div>
+
+    <div class="section-label" style="font-size: 7.5pt; margin-top: 4px; margin-bottom: 2px; padding: 1px 3px;">Certificate of Transfer</div>
+    <div class="field-row" style="margin-bottom: 2px;">
+      <div class="field-item"><label style="font-size:7.5pt;">Admitted to:</label><div class="field-line">Grade 4 - Self Contained SPED</div></div>
+    </div>
+    <div class="field-row" style="margin-bottom: 3px;">
+      <div class="field-item"><label style="font-size:7.5pt;">Eligible for Admission to:</label><div class="field-line">Grade 4 - Self Contained SPED</div></div>
+    </div>
+    <div style="display: flex; justify-content: space-around; text-align: center;">
+      <div style="width: 45%;">
+        <div style="border-bottom: 1px solid #000; height: 12px;">Dr. Leonardo R. Martinez</div>
+        <span style="font-size: 7pt; color:#333;">Principal</span>
+      </div>
+      <div style="width: 45%;">
+        <div style="border-bottom: 1px solid #000; height: 12px;">Mrs. Maria S. Santos</div>
+        <span style="font-size: 7pt; color:#333;">Teacher</span>
+      </div>
+    </div>
+
+    <div class="section-label" style="font-size: 7.5pt; margin-top: 4px; margin-bottom: 2px; padding: 1px 3px;">Cancellation of Eligibility to Transfer</div>
+    <div class="field-row" style="margin-bottom: 2px;">
+      <div class="field-item"><label style="font-size:7.5pt;">Admitted in:</label><div class="field-line">&nbsp;</div></div>
+    </div>
+    <div class="field-row" style="margin-bottom: 3px;">
+      <div class="field-item"><label style="font-size:7.5pt;">Date:</label><div class="field-line">&nbsp;</div></div>
+    </div>
+    <div style="display: flex; justify-content: flex-end; text-align: center;">
+      <div style="width: 45%;">
+        <div style="border-bottom: 1px solid #000; height: 12px;"></div>
+        <span style="font-size: 7pt; color:#333;">Principal</span>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 2: PROGRESS REPORT CARD - INSIDE SPREAD 1
+     ========================================================== -->
+<div class="page-landscape">
+  <!-- PANEL 1: Daily Living Skills Domain -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>DAILY LIVING SKILLS DOMAIN</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" class="subdomain-row">SELF FEEDING</td></tr>
+          <tr><td class="indicator-col">Expresses need to eat or drink through non-verbal and/or verbal means</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Chews and swallows different kinds of foods</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Swallows liquid like soup</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Picks up food with fingers or scoops with spoon</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Picks up and eats finger food</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sips and drinks liquid</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Eats with spoon and fork</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses the table knife for spreading</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Cuts food using the table knife</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Distinguishes edible and non-edible foods and substances</td><td>D</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td class="indicator-col">Peels/unwraps food</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">TOILETING</td></tr>
+          <tr><td class="indicator-col">Uses comfort room/toilet bowl to urinate or defecate</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses the toilet paper to clean up self and disposes it properly</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses diaper correctly</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Cleans self with soap and water after toileting</td><td>AP</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">DRESSING</td></tr>
+          <tr><td class="indicator-col">Removes / puts on shoes or slippers</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Removes / puts on socks</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Removes / puts on clothes</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Opens and closes dressing implements (zippers, buttons, snaps, buttonholes)</td><td>D</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">GROOMING AND HYGIENE</td></tr>
+          <tr><td class="indicator-col">Washes and dries hands properly</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Cleans own face</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Brushes teeth</td><td>AP</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td class="indicator-col">Combs/brushes hair</td><td>AP</td><td>AP</td><td>AP</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Socio-Emotional Domain -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>SOCIO-EMOTIONAL DOMAIN</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="indicator-col">Uses courteous expressions appropriately</td><td>AP</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td class="indicator-col">Asks an apology when necessary</td><td>AP</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td class="indicator-col">Pays attention to someone talking</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Engages in communication with others</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Plays with peers</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Makes friends easy</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Follows rules and regulations</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Seeks/accepts help</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Expresses/shows appropriate emotions</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Waits for one's turn</td><td>AP</td><td>AP</td><td>AP</td><td>P</td></tr>
+          <tr><td class="indicator-col">Asks permission to use things owned by others</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Seeks help from older friends</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Imitates adult activities</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Displays sense of humor</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies self as a member of a family/cultural group</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies personal belongings</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Displays sensitivity to the feelings of others</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Shows sportsmanship</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Shows initiatives to work on tasks</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Works independently</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Shows self-control</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 2: PROGRESS REPORT CARD - INSIDE SPREAD 2
+     ========================================================== -->
+<div class="page-landscape">
+  <!-- PANEL 1: Language Development Domain -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>LANGUAGE DEVELOPMENT DOMAIN</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" class="subdomain-row">LISTENING</td></tr>
+          <tr><td class="indicator-col">Follows simple directions</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Distinguishes different types of sounds</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Comprehends simple and familiar stories</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Listens attentively to stories, poems/rhymes</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">SPEAKING</td></tr>
+          <tr><td class="indicator-col">Increases vocabulary to describe things</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Increases vocabulary to express one's feelings</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Increases vocabulary to share information</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Answers and responds to questions accordingly</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Narrates simple and familiar stories</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td colspan="5" class="subdomain-row">READING</td></tr>
+          <tr><td class="indicator-col">Discriminates similarities and differences between pictures and objects</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Classifies objects according to function</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Notes details in pictures</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Visualizes objects and pictures from memory</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Comprehends picture stories</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Performs relevant study skills</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td colspan="5" class="subdomain-row">WRITING</td></tr>
+          <tr><td class="indicator-col">Holds/grips pencil properly</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Traces lines and shapes</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Traces letters, numbers, and one's name properly</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Copies lines, shapes, letters, numbers, and one's name properly</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Draws basic figures</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Uses basic strokes correctly</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Psychomotor Domain -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>PSYCHOMOTOR DOMAIN</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td colspan="5" class="subdomain-row">BASIC MOVEMENT</td></tr>
+          <tr><td class="indicator-col">Sits, stands and walks with good posture</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Runs and jogs gradually in increasing distance</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Jumps and performs other exercises with or without music</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Lifts increasing heavy weights</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Balances with one foot for gradually increasing period of time</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Imitates motor movements of people and animals</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Bends and straightens knees properly while feet flat on the floor</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Goes up and down the stairs</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">PERCEPTUAL MOTOR SKILLS</td></tr>
+          <tr><td class="indicator-col">Uses clay to make simple but increasingly meaningful shapes and objects</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses crayon to color</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">GROSS MOTOR COMPETENCIES</td></tr>
+          <tr><td class="indicator-col">Walks while carrying objects</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Jumps toward aim without falling</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Throws and catches objects</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Kicks ball without losing balance</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Hops alternately without falling</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td colspan="5" class="subdomain-row">FINE MOTOR SKILLS</td></tr>
+          <tr><td class="indicator-col">Makes an object out of clay</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Squeezes soft rubber ball of convenient size</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Squeezes water from wet rag</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Folds, divides and tears paper into halves/pieces</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Cuts out shapes, outline and objects</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Pastes paper properly</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Strings and threads beads</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Turns doorknob with forearm rotation</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Removes bottle cap</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 2: PROGRESS REPORT CARD - INSIDE SPREAD 3
+     ========================================================== -->
+<div class="page-landscape">
+  <!-- PANEL 1: Cognitive Domain -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>COGNITIVE DOMAIN</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="indicator-col">Identifies colors</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies shapes</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies letters of the alphabet</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies the sounds of the letters of the alphabet</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies sizes (long, short, big, small, tall, short)</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sorts objects according to color</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sorts objects according to size</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sorts objects according to shape</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Tells the size of an object</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies numbers up to ___</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Counts numbers up to ___</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Follows one to three steps direction</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies the body parts</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies the five senses and their functions</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sequences/Arranges pictures in the story</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies/reads simple words with pictures</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Identifies/reads simple phrases with pictures</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Identifies/reads simple sentences with pictures</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Identifies the days of the week</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies the months of the year</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies one self</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies members of the family</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies different community helpers in school and/or in the community</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies objects/pictures being presented</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Aesthetic and Creative Domain -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>AESTHETIC AND CREATIVE DOMAIN</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="indicator-col">Uses the five senses to observe things in the classroom</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Enumerates and classifies things in terms of color, shape, texture and number</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Points to drawings or paintings that they like or appreciate</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies basic drawing materials</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Draws and paints simple objects based on a visual model</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Displays his drawings and paintings on display board</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Listens to musical pieces familiar to the child</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sings, with/without prompts, the musical pieces listened to</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sees and touches musical instruments found in school</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Names musical instruments found in school</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Watches how these musical instruments are used</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Plays with the musical instruments with teacher's prompts</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Expresses appreciation for the dance that they prefer</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Expresses appreciation for what was heard through body movements</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Moves one's body with the variety of rhythms heard</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Demonstrates feelings through facial expressions</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Dances with/without music with the teacher</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Watches a dramatic play from media sources (television, internet)</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 2: PROGRESS REPORT CARD - INSIDE SPREAD 4
+     ========================================================== -->
+<div class="page-landscape">
+  <!-- PANEL 1: Behavioral Development -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>BEHAVIORAL DEVELOPMENT</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="indicator-col">Uses appropriate verbal communication for social interaction</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Learns how to speak at a lower tone</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Familiarizes with and takes a rerouted direction</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Follows "Quieting Down" instruction</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Performs simple tasks (e.g. throwing trash in the garbage, etc.)</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Puts back materials used like pencil in its proper place</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Accepts consequences of behavior</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Follows teacher's command/instruction</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Participates well in the lesson executed by the teacher</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Responds to questions, activities given to him/her</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Attends to task without getting out from the chair</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Watches/listens to videos/music for 5 minutes or more</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Responds positively to behavior management procedures</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Reduces/eliminates inappropriate and aggressive behaviors during the session</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Reduces/eliminates tantrums during the session</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Plays with other children</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Takes turn in game activity</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Takes turn in games/knows how to wait when playing time</td><td>D</td><td>D</td><td>AP</td><td>AP</td></tr>
+          <tr><td class="indicator-col">Shares things/object without teachers' prompt</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Sits for 30 minutes to one hour</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Develops longer attention span to complete the task</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Completes task on time</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- PANEL 2: Orientation and Mobility -->
+  <div class="panel">
+    <div class="domain-section">
+      <h2>ORIENTATION AND MOBILITY</h2>
+      <table class="domain-table">
+        <thead>
+          <tr>
+            <th class="indicator-col">Performance Indicators</th>
+            <th class="q-col">1</th>
+            <th class="q-col">2</th>
+            <th class="q-col">3</th>
+            <th class="q-col">4</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr><td class="indicator-col">Tells the different body parts</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Points/names body parts on the right/left side</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Tells the spatial location of an object/person/place</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Follows directions given to find objects</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses the position of common objects in reference to one's self</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Performs bilateral arm and leg movements simultaneously with coordination</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Shows the body with balance and rhythm</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Identifies landmarks as clues</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Protects one's self from vertical and shoulder height obstacles using the upper hand and forearm technique</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses parallel walls as guide</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Contacts with shorelines in the environment</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Locates dropped objects in the environment using different search patterns</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Familiarizes with cardinal direction as North, South, East, West in indoor travels</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Utilizes appropriate travel techniques in travelling in different locations</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Acquaints oneself with sighted guide</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Follows signals when to go up and down the stairs</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Follows directly behind sighted guide without changing the position of the hands</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Enters and exits safely when the door and the sighted guide are on the opposite side of the pupil</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Acquaints oneself with a cane</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Uses different cane techniques in travelling</td><td>P</td><td>P</td><td>P</td><td>P</td></tr>
+          <tr><td class="indicator-col">Travels in areas without curbs/sidewalks</td><td>AP</td><td>AP</td><td>P</td><td>P</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 4: ESSENTIAL ADAPTIVE SKILLS AND COMPETENCIES
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="annex-kicker"><span>Annex 4: Essential Adaptive Skills and Competencies</span></div>
+  <div style="text-align: center; margin-top: 15px; margin-bottom: 15px;">
+    <h1 style="font-size: 14pt; font-weight: bold; text-transform: uppercase;">Essential Adaptive Skills and Competencies</h1>
+  </div>
+  
+  <p style="text-align: justify; line-height: 1.45; margin-bottom: 15px;">
+    Essential adaptive skills and competencies help LSENs manage schooling and day-to-day activities. These are necessary skills for functioning daily, as follows:
+  </p>
+
+  <ol style="padding-left: 25px; line-height: 1.5; font-size: 9.5pt;">
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Self-Care/Daily Living Skills</span> - bathing, dressing, grooming, and feeding one's self.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Communication Skills</span> - understanding and using verbal and nonverbal language.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Self-direction</span> - problem solving, exercising choice, and initiating and planning activities.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Social Skills</span> - maintaining interpersonal relationships, understanding emotions and social cues, understanding fairness and honesty, obeying rules and laws.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Leisure Skills</span> - taking responsibility for one's own activities, able to participate in the community.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Home or School Living</span> - housekeeping, cooking, doing laundry, maintaining living space.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Functional Academics</span> - using reading, writing, and math skills in everyday life.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Community Use</span> - shopping, using public transportation, using community services.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Work</span> - ability to maintain part-time or full-time employment, either competitive or sheltered; ability to work under supervision, cooperate with coworkers, be reliable and punctual, and meet work standards.</li>
+    <li style="margin-bottom: 8px;"><span style="font-weight: bold;">Health and Safety</span> - ability to protect one's self, responding to health problems.</li>
+  </ol>
+</div>
+
+<!-- ==========================================================
+     ANNEX 3: BEHAVIOR INTERVENTION REPORT (BIR) - PAGE 1 (Instructions)
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="annex-kicker"><span>Annex 3: Behavior Intervention Report</span></div>
+  
+  <div style="text-align: center; margin: 20px 0 25px;">
+    <h1 style="font-size: 13pt; font-weight: bold; text-transform: uppercase;">How to Use the Behavior Intervention Report (BIR)</h1>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <h3 style="font-size: 10.5pt; font-weight: bold; margin-bottom: 5px;">Description</h3>
+    <p style="text-align: justify; line-height: 1.45; text-indent: 30px; margin-bottom: 10px;">
+      Behavior Intervention Report (BIR) is a narrative report for learners manifesting behavior that interferes instruction and affects academic performance, as reflected in the anecdotal records in the present grade level of the learner. Specifically, it includes the personal information about the learner, antecedent/prior behavior, observable behavior, result/consequence of behavior, interventions, target behavior and specific objectives.
+    </p>
+    <p style="text-align: justify; line-height: 1.45; text-indent: 30px; margin-bottom: 10px;">
+      SPED teachers shall use the Behavior Intervention Report quarterly as a supplementary record to the K to 12 School Form 9 (SF9). Likewise, the general education teachers shall use the form. This report should be treated with confidentiality and limited for the consumption of teachers / advisers, therapists and parents.
+    </p>
+    <p style="text-align: justify; line-height: 1.45; text-indent: 30px; margin-bottom: 10px;">
+      At the end of the school year, the unclaimed BIR must be turned over to the Guidance Counselor/Coordinator or office of the school principal for safe keeping and future reference.
+    </p>
+    <p style="text-align: justify; line-height: 1.45; text-indent: 30px; margin-bottom: 10px;">
+      The results of the behavior report include the description of the target behavior to be addressed. The intervention strategies shall be discussed quarterly by the Behavior Intervention Planning (BIP) team or as the need arises.
+    </p>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <h3 style="font-size: 10.5pt; font-weight: bold; margin-bottom: 5px;">Members of the Behavior Intervention Team (BIR)</h3>
+    <p style="text-align: justify; line-height: 1.45; text-indent: 30px;">
+      School Heads, teachers/advisers, parent's/family members, guidance counselors, learner concerned, and other multi-disciplinary team.
+    </p>
+  </div>
+
+  <div style="margin-bottom: 15px;">
+    <h3 style="font-size: 10.5pt; font-weight: bold; margin-bottom: 5px;">Steps in Accomplishing the Behavior Intervention Report (BIR)</h3>
+    <ol style="line-height: 1.45; padding-left: 20px;">
+      <li style="margin-bottom: 6px;">Identify prior behavior, refer to the baseline data of the learner if available</li>
+      <li style="margin-bottom: 6px;">Describe exactly what occurred in the environment that triggered the behavior was exhibited. Identify prior behavior of the learners at home, school, and other settings.</li>
+      <li style="margin-bottom: 6px;">List different types of behavior displayed by the learners during the incident to identify the notable behavior manifested.</li>
+      <li style="margin-bottom: 6px;">Prepare measurable goals to address and improve the behavior of the learners.</li>
+      <li style="margin-bottom: 6px;">Prepare behavioral intervention plan.</li>
+      <li style="margin-bottom: 6px;">Enhance and master target behavior goal.</li>
+    </ol>
+  </div>
+  
+  <div class="footer-page">1</div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 3: BEHAVIOR INTERVENTION REPORT (BIR) - PAGE 2 (Demographics)
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="header-logo-container">
+    <img src="deped_logo.webp" alt="DepEd Logo" class="header-logo">
+    <div class="text-box">
+      <div class="republic-line">Republic of the Philippines</div>
+      <div class="deped-line">Department of Education</div>
+    </div>
+    <div style="width: 50px;"></div>
+  </div>
+  <div class="underline-fields-centered">
+    <div class="underline-row"><span class="underline-label">Region:</span> <span class="underline-line"></span></div>
+    <div class="underline-row"><span class="underline-label">Division:</span> <span class="underline-line"></span></div>
+    <div class="underline-row"><span class="underline-label">District:</span> <span class="underline-line"></span></div>
+    <div class="underline-row"><span class="underline-label">School:</span> <span class="underline-line"></span></div>
+  </div>
+  <div style="font-size: 8pt; text-align: right; font-weight: bold; margin-top: 5px; margin-bottom: 10px;">ANNEX 3: BEHAVIOR INTERVENTION REPORT</div>
+
+  <div class="form-title">Behavior Intervention Report (BIR)</div>
+
+  <div class="section-label">I. Learner Identification</div>
+  
+  <div class="field-row">
+    <div class="field-item" style="flex: 2;"><label>Learner Name:</label><div class="field-line">JOHN ALBERT D. DELA CRUZ</div></div>
+    <div class="field-item" style="flex: 1;"><label>LRN:</label><div class="field-line">123456789012</div></div>
+  </div>
+  <div class="field-row">
+    <div class="field-item" style="width: 150px;"><label>Age / Sex:</label><div class="field-line">10 years / Male</div></div>
+    <div class="field-item" style="flex: 1;"><label>Primary Diagnosis:</label><div class="field-line">Autism Spectrum Disorder (Level 2)</div></div>
+  </div>
+  <div class="field-row">
+    <div class="field-item" style="flex: 1;"><label>Educational Placement:</label><div class="field-line">Self-Contained (ASD)</div></div>
+    <div class="field-item" style="flex: 1;"><label>Date of Observation:</label><div class="field-line">October 24, 2025</div></div>
+  </div>
+  <div class="field-row">
+    <div class="field-item" style="flex: 1.5;"><label>Observer / Teacher Name:</label><div class="field-line">Mrs. Maria S. Santos</div></div>
+    <div class="field-item" style="flex: 1;"><label>School ID:</label><div class="field-line">300456</div></div>
+  </div>
+  <div class="field-row">
+    <div class="field-item" style="flex: 2;"><label>Parents / Guardians:</label><div class="field-line">Mr. Fernando A. Dela Cruz</div></div>
+    <div class="field-item" style="flex: 1.2;"><label>Contact Nos.:</label><div class="field-line">0917-1234567</div></div>
+  </div>
+
+  <div class="section-label">II. Background and Context</div>
+  <div style="margin-bottom: 10px;">
+    <strong>Difficulty / Disability Description:</strong>
+    <div class="write-line">John Albert has Autism Spectrum Disorder, exhibiting expressive communication deficits and sensory sensitivities.</div>
+    <div class="write-line">He has a short attention span and displays minor hand-flapping when frustrated.</div>
+    <div class="write-line"></div>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <strong>Baseline Behavior Data:</strong>
+    <div class="write-line">During baseline, the learner stays on task for an average of 4 minutes before seeking sensory movement.</div>
+    <div class="write-line">He displays task avoidance through vocal screaming or running out of his seat.</div>
+    <div class="write-line">This behavior occurs approximately 6 to 8 times per school day.</div>
+  </div>
+  <div style="margin-bottom: 10px;">
+    <strong>Medical / Psychological Assessment:</strong>
+    <div style="margin-top: 4px; margin-bottom: 4px;">
+      <span class="checkbox-item"><span class="check-box">✓</span> Yes (Documented)</span>
+      <span class="checkbox-item" style="margin-left: 20px;"><span class="check-box"></span> No assessment details recorded</span>
+    </div>
+    <div class="write-line">Diagnosed by developmental pediatrician Dr. Reyes in Nov 2024.</div>
+    <div class="write-line">Assessment reports sensory processing difficulties and mild intellectual impairment.</div>
+  </div>
+
+  <div class="footer-page">2</div>
+</div>
+
+<!-- ==========================================================
+     ANNEX 3: BEHAVIOR INTERVENTION REPORT (BIR) - PAGE 3 (ABC Table)
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="section-label" style="margin-top:0;">III. Antecedent-Behavior-Consequence (A-B-C) Analysis</div>
+  
+  <table style="font-size: 8.5pt;">
+    <thead>
+      <tr>
+        <th style="width: 33.33%;">Antecedents (what triggered the behavior)</th>
+        <th style="width: 33.33%;">Observable Behavior (what the student did)</th>
+        <th>Consequence (what occurred immediately after)</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="background: #f5f5f5; font-weight: bold;"><td colspan="3">A. Home Environment</td></tr>
+      <tr><td style="height: 45px;"></td><td></td><td></td></tr>
+      <tr style="background: #f5f5f5; font-weight: bold;"><td colspan="3">B. School Environment</td></tr>
+      <tr><td style="height: 45px;"></td><td></td><td></td></tr>
+      <tr style="background: #f5f5f5; font-weight: bold;"><td colspan="3">C. Other Environment / Community</td></tr>
+      <tr><td style="height: 45px;"></td><td></td><td></td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">IV. Behavior Intervention Plan</div>
+  <table style="font-size: 8.5pt; margin-top: 4px;">
+    <tbody>
+      <tr>
+        <td style="width: 50%; font-weight: bold; background:#f5f5f5;">Targeted Behavior for Modification:</td>
+        <td style="font-weight: bold; background:#f5f5f5;">Specific Objectives:</td>
+      </tr>
+      <tr>
+        <td style="height: 35px;">Leaving seat and vocal screaming during academic sessions.</td>
+        <td>Learner will stay seated for 15 minutes and request breaks using PECS without screaming.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; background:#f5f5f5;">Proactive Strategies (Prevention):</td>
+        <td style="font-weight: bold; background:#f5f5f5;">Reactive Strategies (Response):</td>
+      </tr>
+      <tr>
+        <td style="height: 35px;">Provide visual schedule, noise-cancelling headphones, and scheduled sensory breaks.</td>
+        <td>Redirect to visual "First-Then" card, ignore minor screaming, and reward calm seating.</td>
+      </tr>
+      <tr>
+        <td style="font-weight: bold; background:#f5f5f5;">Basic Interventions Currently Handled:</td>
+        <td style="font-weight: bold; background:#f5f5f5;">Past Interventions &amp; Efficacy:</td>
+      </tr>
+      <tr>
+        <td style="height: 35px;">Visual timer, PECS, and sensory seating cushion.</td>
+        <td>Time-out was ineffective and caused more agitation. PECS is highly effective.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 15px; margin-top: 25px; text-align: center;">
+    <div>
+      <div style="border-bottom: 1px solid #000; height: 16px;"></div>
+      <div style="font-size: 7.5pt; font-weight: bold; margin-top: 2px;">Prepared by:
+      Mrs. Maria S. Santos
+    </div>
+    <div>
+      <div style="font-weight: bold; font-size: 9.5pt; text-align: left;">Noted:</div>
+      Dr. Leonardo R. Martinez
+    </div>
+      <div style="font-size: 8.5pt; margin-top: 2px;">School Principal/School Head</div>
+    </div>
+  </div>
+
+  <div class="footer-page">4 | Page</div>
+</div>
+
+<!-- ==========================================================
+     FORM 4 – INDIVIDUAL TRANSITION PLAN (ITP) - PAGE 5 (Consolidated)
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="header-logo-container">
+    <div class="text-box">
+      <div style="font-size: 8.5pt;">Department of Education</div>
+      <div style="font-size: 8.5pt; display: flex; justify-content: center; gap: 15px;">
+        <span>Region <span style="display:inline-block; border-bottom:1px solid #000; width:60px; height:11px;"></span></span>
+        <span>Division of <span style="display:inline-block; border-bottom:1px solid #000; width:100px; height:11px;"></span></span>
+      </div>
+      <div style="font-size: 8.5pt; display: flex; justify-content: center; gap: 15px;">
+        <span>District of <span style="display:inline-block; border-bottom:1px solid #000; width:120px; height:11px;"></span></span>
+        <span><span style="display:inline-block; border-bottom:1px solid #000; width:150px; height:11px;"></span> School</span>
+      </div>
+    </div>
+  </div>
+
+  <h2 style="text-align: center; font-size: 11pt; font-weight: bold; text-transform: uppercase; margin-top: 10px;">CONSOLIDATED FORM FOR TRANSITION PROGRAM</h2>
+
+  <table style="font-size: 8.5pt; margin-top: 15px;">
+    <thead>
+      <tr>
+        <th style="width: 30%;">Name of Learner</th>
+        <th style="width: 25%;">Entry Point</th>
+        <th style="width: 25%;">Learning Package</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr style="height: 20px;"><td>JOHN ALBERT D. DELA CRUZ</td><td>Grade to Grade</td><td>Care Skills, Pre-Vocational</td><td>Transitioning successfully. Requires close supervision.</td></tr>
+      <tr style="height: 20px;"><td>MARIA ALICIA A. REYES</td><td>Home to School</td><td>Life Skills, Care Skills</td><td>Struggles with separation anxiety. Adapting slowly.</td></tr>
+      <tr style="height: 20px;"><td>DANIEL KEVIN G. CRUZ</td><td>School to Employment</td><td>Livelihood, Career Skills</td><td>Enrolled in sheltered workshop packaging program.</td></tr>
+      <tr style="height: 20px;"><td>SARAH JANE M. SANTOS</td><td>SPED to Inclusion</td><td>Functional Academics, Social</td><td>Ready for Grade 1 inclusion class with shadow teacher.</td></tr>
+      <tr style="height: 20px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr style="height: 20px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+      <tr style="height: 20px;"><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td><td>&nbsp;</td></tr>
+    </tbody>
+  </table>
+
+  <div class="footer-page">5 | Page</div>
+</div>
+
+<!-- ==========================================================
+     FORM 5 – INDIVIDUALIZED EDUCATION PLAN (IEP) - PAGE 1
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="text-center border-bottom pb-2 mb-3">
+    <div style="font-weight: bold; font-size: 9pt;">Republic of the Philippines</div>
+    <div style="font-size: 9pt;">Department of Education</div>
+    <h1 style="font-size: 12pt; font-weight: 800; text-transform: uppercase; margin-top: 3px;">Individualized Education Plan (IEP)</h1>
+    <div style="font-size: 8.5pt; color: #555;">School Year 2025-2026</div>
+  </div>
+
+  <div class="section-label">Learner Information</div>
+  <table style="font-size: 8.5pt;">
+    <tbody>
+      <tr>
+        <th style="width: 15%; text-align: left;">Name</th>
+        <td style="width: 35%;"><div class="write-line" style="border:none;">JOHN ALBERT D. DELA CRUZ</div></td>
+        <th style="width: 15%; text-align: left;">LRN</th>
+        <td style="width: 35%;"><div class="write-line" style="border:none;">123456789012</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Birthdate / Age</th>
+        <td><div class="write-line" style="border:none;">October 12, 2015 / 10</div></td>
+        <th style="text-align: left;">Grade</th>
+        <td><div class="write-line" style="border:none;">Grade 3 Non-Graded</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">School</th>
+        <td><div class="write-line" style="border:none;">Valenzuela SPED Center</div></td>
+        <th style="text-align: left;">Disabilities</th>
+        <td><div class="write-line" style="border:none;">Autism Spectrum Disorder (Level 2)</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">Family and Contact Information</div>
+  <table style="font-size: 8.5pt;">
+    <tbody>
+      <tr>
+        <th style="width: 20%; text-align: left;">Mother Tongue</th>
+        <td style="width: 30%;"><div class="write-line" style="border:none;">Tagalog</div></td>
+        <th style="width: 20%; text-align: left;">Home Address</th>
+        <td style="width: 30%;"><div class="write-line" style="border:none;">124 Rizal St., Barangay Poblacion, Valenzuela City</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Learner Phone</th>
+        <td><div class="write-line" style="border:none;">N/A</div></td>
+        <th style="text-align: left;">Guardian Name</th>
+        <td><div class="write-line" style="border:none;">Mr. Fernando A. Dela Cruz</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Guardian Workplace</th>
+        <td><div class="write-line" style="border:none;">Valenzuela Public Market</div></td>
+        <th style="text-align: left;">Guardian Email</th>
+        <td><div class="write-line" style="border:none;">demo@example.invalid</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Guardian Landline</th>
+        <td><div class="write-line" style="border:none;">N/A</div></td>
+        <th style="text-align: left;">Guardian Mobile</th>
+        <td><div class="write-line" style="border:none;">0917-1234567</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Guardian Mother Tongue</th>
+        <td colspan="3"><div class="write-line" style="border:none;">Tagalog</div></td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">Meeting Details</div>
+  <table style="font-size: 8.5pt;">
+    <tbody>
+      <tr>
+        <th style="width: 20%; text-align: left;">Meeting Date</th>
+        <td style="width: 30%;"><div class="write-line" style="border:none;">June 15, 2025</div></td>
+        <th style="width: 20%; text-align: left;">Purpose</th>
+        <td style="width: 30%;"><div class="write-line" style="border:none;">Annual IEP Review &amp; Goal Formulation</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Date of Last IEP</th>
+        <td><div class="write-line" style="border:none;">June 18, 2024</div></td>
+        <th style="text-align: left;">Review Date</th>
+        <td><div class="write-line" style="border:none;">November 15, 2025</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Interpreter / Accommodations</th>
+        <td colspan="3"><div class="write-line" style="border:none;">Visual prompt schedule and noise-cancelling headphones.</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Medical Diagnosis</th>
+        <td>
+          <span class="checkbox-item"><span class="check-box">✓</span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 10px;"><span class="check-box"></span> No</span>
+        </td>
+        <th style="text-align: left;">Diagnosis Details</th>
+        <td><div class="write-line" style="border:none;">Autism Spectrum Disorder (Level 2)</div></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Meeting Comments</th>
+        <td colspan="3"><div class="write-line" style="border:none;">IEP team aligned on prioritising care skills and fine motor tasks. Parents expressed satisfaction with class size.</div></td>
+      </tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==========================================================
+     FORM 5 – INDIVIDUALIZED EDUCATION PLAN (IEP) - PAGE 2
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="text-center border-bottom pb-2 mb-3">
+    <div style="font-weight: bold; font-size: 9pt;">Republic of the Philippines</div>
+    <div style="font-size: 9pt;">Department of Education</div>
+    <h1 style="font-size: 12pt; font-weight: 800; text-transform: uppercase; margin-top: 3px;">Individualized Education Plan (IEP)</h1>
+  </div>
+
+  <div class="section-label">Present Levels</div>
+  <table style="font-size: 8.5pt;">
+    <tbody>
+      <tr>
+        <th style="width: 25%; text-align: left; background: #f5f5f5;">Evaluation Results</th>
+        <td style="height: 45px;">ABAS-3 results indicate significant delay in conceptual and social adaptive behaviors. Cognitively knows colors/shapes.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left; background: #f5f5f5;">Academic Strengths</th>
+        <td style="height: 45px;">Excellent visual association, matches patterns easily, writes numbers 1-10 with tracing.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left; background: #f5f5f5;">Academic Needs</th>
+        <td style="height: 45px;">Requires PECS for communication, needs fine motor guidelines, struggles with abstract matching.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left; background: #f5f5f5;">Parent Concerns</th>
+        <td style="height: 45px;">Lacks danger awareness outdoors, gets anxious in crowds, requires help in zipping/buttoning.</td>
+      </tr>
+      <tr>
+        <th style="text-align: left; background: #f5f5f5;">Disability Impact</th>
+        <td style="height: 45px;">Sensory overload impacts focus in classroom; language barriers affect ability to express basic wants.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">Difficulties and Special Factors</div>
+  <table style="font-size: 8.5pt;">
+    <tbody>
+      <tr>
+        <th style="width: 40%; text-align: left;">Difficulty in Seeing</th>
+        <td><span class="checkbox-item"><span class="check-box"></span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Hearing</th>
+        <td><span class="checkbox-item"><span class="check-box"></span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Communicating</th>
+        <td><span class="checkbox-item"><span class="check-box">✓</span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Mobility/Walking</th>
+        <td><span class="checkbox-item"><span class="check-box"></span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Displaying Interpersonal Behaviors</th>
+        <td><span class="checkbox-item"><span class="check-box"></span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Performing Adaptive Skills</th>
+        <td><span class="checkbox-item"><span class="check-box">✓</span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Basic Skills and Applying Knowledge</th>
+        <td><span class="checkbox-item"><span class="check-box"></span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Difficulty in Remembering/Concentrating</th>
+        <td><span class="checkbox-item"><span class="check-box"></span> Noted</span></td>
+      </tr>
+      <tr>
+        <th style="text-align: left;">Other Difficulty</th>
+        <td><div class="write-line" style="border:none;"></div></td>
+      </tr>
+      <tr style="background: #f5f5f5; font-weight: bold;"><td colspan="2">Special Factors Checklist</td></tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty relating with people</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box">✓</span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty in moving/walking</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty in seeing or visual impairment</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty in communicating</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box">✓</span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty in concentrating/paying attention</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty in remembering/understanding</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner has difficulty in hearing or is deaf/hard of hearing</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner needs assistive technology devices or services</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+      <tr>
+        <td style="text-align: left;">Learner requires alternative format for instructional materials</td>
+        <td>
+          <span class="checkbox-item"><span class="check-box"></span> Yes</span>
+          <span class="checkbox-item" style="margin-left: 15px;"><span class="check-box"></span> No</span>
+        </td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-label">IEP Team</div>
+  <table style="font-size: 8.5pt;">
+    <thead><tr><th>Role</th><th>Name</th></tr></thead>
+    <tbody>
+      <tr style="height: 18px;"><td>Parent / Guardian</td><td>Mr. Fernando A. Dela Cruz</td></tr>
+      <tr style="height: 18px;"><td>Learner</td><td>JOHN ALBERT D. DELA CRUZ</td></tr>
+      <tr style="height: 18px;"><td>Special Education Teacher</td><td>Mrs. Maria S. Santos</td></tr>
+      <tr style="height: 18px;"><td>Regular Education Teacher</td><td>Mrs. Clara B. Lazaro (ITP Coord)</td></tr>
+      <tr style="height: 18px;"><td>School Head</td><td>Dr. Leonardo R. Martinez</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<!-- ==========================================================
+     FORM 5 – INDIVIDUALIZED EDUCATION PLAN (IEP) - PAGE 3
+     ========================================================== -->
+<div class="page-portrait">
+  <div class="text-center border-bottom pb-2 mb-3">
+    <div style="font-weight: bold; font-size: 9pt;">Republic of the Philippines</div>
+    <div style="font-size: 9pt;">Department of Education</div>
+    <h1 style="font-size: 12pt; font-weight: 800; text-transform: uppercase; margin-top: 3px;">Individualized Education Plan (IEP)</h1>
+  </div>
+
+  <div class="section-header" style="background:#d9d9d9; border:1px solid #000; font-weight:bold; font-size:9.5pt; padding:2px 4px; text-transform:uppercase;">Barriers and Accommodations</div>
+  <table style="font-size: 8pt; margin-top: 4px;">
+    <thead>
+      <tr>
+        <th style="width: 15%;">Difficulty</th>
+        <th style="width: 25%;">Barrier</th>
+        <th style="width: 12%;">Barrier Qualifier</th>
+        <th style="width: 25%;">Facilitator</th>
+        <th style="width: 12%;">Facilitator Qualifier</th>
+        <th>Accommodations</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="height: 45px;">Communication</td>
+        <td>Cannot express toileting needs verbally.</td>
+        <td>Severe</td>
+        <td>Teacher introduces PECS icons.</td>
+        <td>Moderate</td>
+        <td>Allow picture exchanges, use visual bathroom routine chart.</td>
+      </tr>
+      <tr>
+        <td style="height: 45px;">Sensory</td>
+        <td>Gets distressed by loud school bell/crowds.</td>
+        <td>Severe</td>
+        <td>Quiet corner, sensory breaks, headphones.</td>
+        <td>Moderate</td>
+        <td>Provide earmuffs during bells, seat away from speaker.</td>
+      </tr>
+      <tr>
+        <td style="height: 45px;">Fine Motor</td>
+        <td>Struggles to grip standard pencil and write.</td>
+        <td>Moderate</td>
+        <td>Thick crayons, tracing aids, pencil grips.</td>
+        <td>Mild</td>
+        <td>Provide adaptive pencil grip, enlarge tracing sheets.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-header" style="background:#d9d9d9; border:1px solid #000; font-weight:bold; font-size:9.5pt; padding:2px 4px; text-transform:uppercase; margin-top:8px;">Goals and Objectives</div>
+  <table style="font-size: 8pt; margin-top: 4px;">
+    <thead>
+      <tr>
+        <th style="width: 12%;">Interest</th>
+        <th style="width: 15%;">Goal</th>
+        <th style="width: 20%;">Interventions</th>
+        <th style="width: 10%;">Timeline</th>
+        <th style="width: 15%;">Individuals Responsible</th>
+        <th style="width: 13%;">Remarks</th>
+        <th>Progress / Next Steps</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="height: 40px;">Communication</td>
+        <td>Request toilet access using PECS with 90% success.</td>
+        <td>Routine visual schedule practice.</td>
+        <td>June - Oct 2025</td>
+        <td>Mrs. Maria S. Santos, parent</td>
+        <td>Routine established.</td>
+        <td>Can point to PECS card independently now.</td>
+      </tr>
+      <tr>
+        <td style="height: 40px;">Self-Care</td>
+        <td>Button shirt and zip trousers with visual guide.</td>
+        <td>Structured care task box sessions.</td>
+        <td>June 2025 - Mar 2026</td>
+        <td>Mrs. Maria S. Santos, Parent</td>
+        <td>In progress.</td>
+        <td>Zips with initial hook-in assistance.</td>
+      </tr>
+      <tr>
+        <td style="height: 40px;">Academic</td>
+        <td>Write numbers 1 to 10 within broad boundaries.</td>
+        <td>Sandpaper tracing and dotted worksheets.</td>
+        <td>June - Dec 2025</td>
+        <td>Mrs. Maria S. Santos</td>
+        <td>Achieved.</td>
+        <td>Can write 1-10 with minor visual deviations.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div class="section-header" style="background:#d9d9d9; border:1px solid #000; font-weight:bold; font-size:9.5pt; padding:2px 4px; text-transform:uppercase; margin-top:8px;">Transition Planning</div>
+  <table style="font-size: 8pt; margin-top: 4px;">
+    <thead>
+      <tr>
+        <th style="width: 15%;">Interest</th>
+        <th style="width: 25%;">Work Opportunities</th>
+        <th style="width: 25%;">Interventions / Transition Skills</th>
+        <th style="width: 15%;">Individuals Responsible</th>
+        <th>Remarks</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr>
+        <td style="height: 35px;">Fine Motor</td>
+        <td>Sort plastic items by size/color (packaging practice).</td>
+        <td>Sorting task box, daily token rewards.</td>
+        <td>Mrs. Maria S. Santos</td>
+        <td>Sorts with 100% accuracy. Ready for task variation.</td>
+      </tr>
+      <tr>
+        <td style="height: 35px;">Independence</td>
+        <td>Follow classroom left-to-right work drawer system.</td>
+        <td>Structured classroom organization model.</td>
+        <td>Mrs. Maria S. Santos</td>
+        <td>Learned the routine. Completes 3 drawer tasks alone.</td>
+      </tr>
+    </tbody>
+  </table>
+
+  <div style="display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; margin-top: 25px; text-align: center;">
+    <div>
+      <div style="border-bottom: 1px solid #000; height: 16px;"></div>
+      <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">Parent / Guardian</div>
+    </div>
+    <div>
+      <div style="border-bottom: 1px solid #000; height: 16px;">Mr. Fernando A. Dela Cruz</div>
+      <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">Learner</div>
+    </div>
+    <div>
+      <div style="border-bottom: 1px solid #000; height: 16px;">JOHN ALBERT D. DELA CRUZ</div>
+      <div style="font-size: 8pt; font-weight: bold; margin-top: 2px;">School Head</div>
+      Dr. Leonardo R. Martinez
+    </div>
+  </div>
+  <p style="font-size: 8pt; color: #555; margin-top: 15px; font-style: italic;">
+    Rights notification: Learner has been informed of rights under law and transfer of rights / not applicable.
+  </p>
+</div>
+
+</body>
+</html>

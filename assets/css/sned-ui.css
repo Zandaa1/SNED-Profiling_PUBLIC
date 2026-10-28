@@ -1,0 +1,686 @@
+/*
+ * SNED UI Redesign Stylesheet
+ * Sage Garden Theme (dark green sidebar, accents, mint, dew)
+ */
+
+:root {
+  --sage-dark:   #2D6A4F;   /* active states, primary buttons, sidebar */
+  --sage-mid:    #40916C;   /* accents, icons, hover states */
+  --sage-light:  #D8F3DC;   /* checked states, highlights */
+  --sage-pale:   #F0FAF4;   /* section backgrounds, card fills */
+  --sage-border: #C3DECE;   /* input borders, dividers */
+  --sage-error:  #C0392B;
+  --sage-error-light: #FFF5F5;
+  --sage-valid-border: #95D5B2;
+  --sage-valid-bg: #F8FFFC;
+}
+
+/* ── General Spacing & Layout Overrides ── */
+.form-row-gap {
+  margin-bottom: 24px !important;
+}
+
+.form-group-spacing {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+/* ── Form Inputs Sizing & States ── */
+.form-control, .form-select {
+  height: 48px !important;
+  padding: 12px 16px !important;
+  font-size: 16px !important;
+  border: 1px solid var(--sage-border) !important;
+  border-radius: 8px !important;
+  background-color: #ffffff !important;
+  color: #1B2631 !important;
+  transition: border-color 150ms ease-in-out, box-shadow 150ms ease-in-out, background-color 150ms ease-in-out !important;
+}
+
+textarea.form-control {
+  height: auto !important;
+  min-height: 120px !important;
+}
+
+.form-label {
+  font-size: 14px !important;
+  font-weight: 500 !important;
+  color: var(--sage-mid) !important;
+  margin-bottom: 8px !important;
+  display: inline-block;
+}
+
+/* Hint and validation labels */
+.form-hint {
+  font-size: 12px !important;
+  color: #7f8c8d !important;
+  margin-top: 4px;
+}
+
+.invalid-feedback {
+  font-size: 13px !important;
+  color: var(--sage-error) !important;
+  margin-top: 6px;
+  display: none;
+  align-items: center;
+  gap: 4px;
+}
+.was-validated .form-control:invalid ~ .invalid-feedback,
+.form-control.is-invalid ~ .invalid-feedback {
+  display: flex !important;
+}
+
+/* Input states styling */
+.form-control:focus, .form-select:focus {
+  border-color: var(--sage-mid) !important;
+  box-shadow: 0 0 0 3px rgba(64, 145, 108, 0.15) !important;
+  background-color: #ffffff !important;
+  outline: 0 !important;
+}
+
+/* Filled / valid state: only show completion styling when a field actually has content */
+.form-control.field-has-content:not(:focus):not(.is-invalid):valid,
+.form-select.field-has-content:not(:focus):not(.is-invalid):valid {
+  border-color: var(--sage-valid-border) !important;
+  background-color: var(--sage-valid-bg) !important;
+}
+
+/* Error state overrides */
+.form-control.is-invalid, .form-control:invalid.was-validated {
+  border-color: var(--sage-error) !important;
+  background-color: var(--sage-error-light) !important;
+}
+
+/* Readonly and disabled */
+.form-control:disabled, .form-select:disabled,
+.form-control[readonly], .form-select[readonly] {
+  background-color: #f5f6fa !important;
+  border-color: var(--sage-border) !important;
+  opacity: 0.8;
+  cursor: not-allowed;
+}
+
+/* ── Custom Tile Checkboxes and Radios ── */
+.tile-checkbox-wrapper, .tile-radio-wrapper {
+  position: relative;
+  display: block;
+  min-width: 0 !important; /* Prevents overflow in CSS Grid */
+}
+
+.tile-checkbox-label, .tile-radio-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  min-height: 48px;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid var(--sage-border);
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1B2631;
+  transition: all 150ms cubic-bezier(0.16, 1, 0.3, 1);
+  width: 100%;
+  
+  /* Layout wrapping fixes to prevent text overlap/overflow */
+  word-break: break-word !important;
+  overflow-wrap: anywhere !important;
+  white-space: normal !important;
+}
+
+.tile-checkbox-label span, .tile-radio-label span {
+  min-width: 0 !important;
+}
+
+.tile-checkbox-label > .tile-checkbox-text,
+.tile-radio-label > span:last-child {
+  flex: 1 1 auto;
+  line-height: 1.25;
+  overflow-wrap: break-word !important;
+  word-break: normal !important;
+  text-wrap: balance;
+}
+
+.tile-checkbox-wrapper input[type="checkbox"],
+.tile-radio-wrapper input[type="radio"] {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+
+.tile-checkbox-wrapper input[type="checkbox"]:checked + .tile-checkbox-label,
+.tile-radio-wrapper input[type="radio"]:checked + .tile-radio-label {
+  border-color: var(--sage-mid) !important;
+  background-color: var(--sage-light) !important;
+  color: var(--sage-dark) !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(45, 106, 79, 0.1);
+}
+
+.tile-checkbox-wrapper input[type="checkbox"]:focus-visible + .tile-checkbox-label,
+.tile-radio-wrapper input[type="radio"]:focus-visible + .tile-radio-label {
+  outline: 2px solid var(--sage-mid);
+  outline-offset: 2px;
+}
+
+.tile-checkbox-label:hover, .tile-radio-label:hover {
+  border-color: var(--sage-mid);
+  background-color: var(--sage-pale);
+}
+
+/* Double column grids for checklists */
+.checkbox-tile-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 12px;
+}
+
+/* ── Redesigned Section Cards ── */
+.sned-card {
+  background: #ffffff;
+  border: 1px solid var(--sage-border);
+  border-radius: 14px;
+  margin-bottom: 20px;
+  overflow: hidden;
+  box-shadow: 0 1px 3px rgba(45, 106, 79, 0.05);
+}
+
+.sned-card-header {
+  background-color: var(--sage-pale);
+  border-bottom: 1px solid var(--sage-border);
+  padding: 14px 20px;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.sned-card-header h5 {
+  margin: 0 !important;
+  font-size: 15px !important;
+  font-weight: 600 !important;
+  color: var(--sage-dark) !important;
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.sned-card-body {
+  padding: 24px 48px;
+}
+
+/* ── Collapsible Optional Details ── */
+details.sned-details {
+  border: 1px solid var(--sage-border);
+  border-radius: 8px;
+  background: var(--sage-pale);
+  margin-bottom: 20px;
+  overflow: hidden;
+}
+
+details.sned-details summary {
+  padding: 14px 20px;
+  font-weight: 600;
+  font-size: 14px;
+  color: var(--sage-dark);
+  cursor: pointer;
+  list-style: none;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  user-select: none;
+}
+
+details.sned-details summary::-webkit-details-marker {
+  display: none;
+}
+
+details.sned-details summary::after {
+  content: '\25BE'; /* Down arrow symbol */
+  font-size: 12px;
+  transition: transform 150ms ease;
+  display: inline-block;
+  color: var(--sage-mid);
+}
+
+details.sned-details[open] summary::after {
+  transform: rotate(180deg);
+}
+
+details.sned-details .details-content {
+  padding: 24px;
+  background: #ffffff;
+  border-top: 1px solid var(--sage-border);
+}
+
+/* ── Multi-Step Step Progress Indicator ── */
+.step-progress-wrapper {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 24px;
+  counter-reset: step;
+  background: var(--sage-pale);
+  padding: 16px 48px; /* Added left and right padding to steps */
+  border-radius: 12px;
+  border: 1px solid var(--sage-border);
+}
+
+.step-progress-item {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  flex: 1;
+  cursor: pointer;
+  transition: opacity 150ms ease;
+  counter-increment: step; /* Increment at the item level to prevent browser skipping */
+}
+
+.step-progress-item:hover {
+  opacity: 0.85;
+}
+
+.step-progress-item::before {
+  content: counter(step);
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 700;
+  font-size: 16px;
+  background: #ffffff;
+  color: var(--sage-mid);
+  border: 2px solid var(--sage-border);
+  transition: all 150ms ease;
+  z-index: 2;
+}
+
+.step-progress-item.active::before {
+  background: var(--sage-dark);
+  color: #ffffff;
+  border-color: var(--sage-dark);
+  box-shadow: 0 0 0 4px var(--sage-light);
+}
+
+.step-progress-item.completed::before {
+  background: var(--sage-mid);
+  color: #ffffff;
+  border-color: var(--sage-mid);
+  content: '\2713'; /* Checkmark */
+}
+
+.step-progress-item .step-progress-label {
+  font-size: 12px;
+  color: var(--sage-mid);
+  margin-top: 8px;
+  text-align: center;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  transition: color 150ms ease;
+}
+
+.step-progress-item.active .step-progress-label {
+  color: var(--sage-dark);
+  font-weight: 700;
+}
+
+.step-progress-item.completed .step-progress-label {
+  color: var(--sage-mid);
+}
+
+.step-progress-item:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 18px;
+  left: calc(50% + 18px);
+  width: calc(100% - 36px);
+  height: 2px;
+  background: var(--sage-border);
+  z-index: 1;
+}
+
+.step-progress-item.completed:not(:last-child)::after {
+  background: var(--sage-mid);
+}
+
+.step-progress-item.active:not(:last-child)::after {
+  background: linear-gradient(90deg, var(--sage-mid), var(--sage-border));
+}
+
+/* Navigation pill buttons styling */
+.btn-pill-navigation {
+  border-radius: 50rem !important;
+  font-weight: 600 !important;
+  padding: 10px 24px !important;
+  transition: all 150ms ease !important;
+}
+
+.btn-pill-primary {
+  background-color: var(--sage-dark) !important;
+  border-color: var(--sage-dark) !important;
+  color: #ffffff !important;
+}
+.btn-pill-primary:hover {
+  background-color: var(--sage-mid) !important;
+  border-color: var(--sage-mid) !important;
+  transform: translateY(-1px);
+}
+
+.btn-pill-secondary {
+  background-color: transparent !important;
+  border-color: var(--sage-mid) !important;
+  color: var(--sage-mid) !important;
+}
+.btn-pill-secondary:hover {
+  background-color: var(--sage-pale) !important;
+  color: var(--sage-dark) !important;
+  transform: translateY(-1px);
+}
+
+/* Sticky bottom nav bar for forms */
+.form-sticky-bottom {
+  position: sticky;
+  bottom: 0;
+  background: #ffffff;
+  padding: 16px 24px;
+  border-top: 1px solid var(--sage-border);
+  border-radius: 16px 16px 0 0;
+  margin-top: 16px;
+  z-index: 10;
+  box-shadow: 0 -2px 10px rgba(0,0,0,0.05);
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 16px;
+}
+
+.form-sticky-bottom.is-first-step {
+  justify-content: flex-end;
+}
+
+.form-sticky-bottom > .d-flex.gap-2 {
+  flex-wrap: wrap;
+  justify-content: flex-end;
+  gap: 12px !important;
+}
+
+.form-sticky-bottom .btn-pill-navigation {
+  min-height: 50px;
+  padding: 12px 28px !important;
+  font-size: 15px !important;
+}
+
+/* ── Ratings and Progress Cards (sf9_form.php) ── */
+.rating-pill-container {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+.rating-pill-btn {
+  border: 1px solid var(--sage-border);
+  background-color: #ffffff;
+  border-radius: 20px;
+  padding: 6px 12px;
+  font-size: 12px;
+  font-weight: 600;
+  color: var(--sage-mid);
+  cursor: pointer;
+  transition: all 150ms ease;
+  user-select: none;
+}
+.rating-pill-btn:hover {
+  background-color: var(--sage-pale);
+  border-color: var(--sage-mid);
+}
+.rating-pill-btn.active {
+  background-color: var(--sage-dark);
+  border-color: var(--sage-dark);
+  color: #ffffff;
+}
+
+/* ── Monospace style input display for LRN ── */
+.lrn-monospace-input {
+  font-family: SFMono-Regular, Menlo, Monaco, Consolas, monospace !important;
+  letter-spacing: 0.15em !important;
+  font-size: 20px !important;
+  text-align: center !important;
+  font-weight: 700 !important;
+}
+
+/* Icon toggle states inside tile checkboxes */
+.tile-checkbox-icon-checked { display: none; }
+.tile-checkbox-icon-unchecked { display: inline-block; }
+.tile-checkbox-wrapper input[type="checkbox"]:checked + .tile-checkbox-label .tile-checkbox-icon-checked,
+.tile-radio-wrapper input[type="radio"]:checked + .tile-radio-label .tile-checkbox-icon-checked { display: inline-block; }
+.tile-checkbox-wrapper input[type="checkbox"]:checked + .tile-checkbox-label .tile-checkbox-icon-unchecked,
+.tile-radio-wrapper input[type="radio"]:checked + .tile-radio-label .tile-checkbox-icon-unchecked { display: none; }
+
+/* Toggle other text field visibility inside disability checklists */
+.col-md-6:has(input[value="Other"]:not(:checked)) .other-specify-container {
+  display: none;
+}
+
+/* ── Sidebar Collapsed Mode for Form Pages ── */
+@media (min-width: 769px) {
+  /* Collapse to a 48px rail */
+  .app-shell.sidebar-collapsed .app-sidebar {
+    width: 48px !important;
+    min-width: 48px !important;
+    flex: 0 0 48px !important;
+  }
+
+  /* Hide text, section labels, and dropdown chevrons */
+  .app-shell.sidebar-collapsed .sidebar-nav-text,
+  .app-shell.sidebar-collapsed .sidebar-section-label,
+  .app-shell.sidebar-collapsed .sidebar-brand-text,
+  .app-shell.sidebar-collapsed .sidebar-profile-info,
+  .app-shell.sidebar-collapsed .sidebar-profile-btn::after,
+  .app-shell.sidebar-collapsed .sidebar-divider,
+  .app-shell.sidebar-collapsed .sidebar-sub-nav,
+  .app-shell.sidebar-collapsed .sidebar-sub-sub-nav {
+    display: none !important;
+  }
+
+  /* Center the icons */
+  .app-shell.sidebar-collapsed .sidebar-nav-link,
+  .app-shell.sidebar-collapsed .sidebar-profile-btn {
+    justify-content: center !important;
+    padding: 8px !important;
+    gap: 0 !important;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar-nav-link i,
+  .app-shell.sidebar-collapsed .sidebar-profile-avatar {
+    font-size: 1.2rem !important;
+    margin: 0 !important;
+  }
+
+  .app-shell.sidebar-collapsed .sidebar-profile-btn {
+    width: auto !important;
+    margin: 0 auto !important;
+  }
+}
+
+@media (max-width: 768px) {
+  .app-shell.sidebar-collapsed .app-sidebar {
+    transform: translateX(-100%) !important;
+    pointer-events: none !important;
+  }
+}
+
+/* ── Difficulty Card Checklist (iep_editor.php) ── */
+.difficulty-card-wrapper {
+  position: relative;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+.difficulty-card-label {
+  display: flex;
+  align-items: center;
+  justify-content: flex-start;
+  text-align: left;
+  padding: 12px 16px;
+  background: #ffffff;
+  border: 1px solid var(--sage-border);
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 150ms ease-in-out;
+  font-size: 14px;
+  font-weight: 500;
+  color: #1B2631;
+  height: 100%;
+  width: 100%;
+}
+.difficulty-card-wrapper input[type="checkbox"] {
+  position: absolute;
+  top: 12px;
+  left: 12px;
+  width: 16px;
+  height: 16px;
+  opacity: 0;
+  cursor: pointer;
+  z-index: 2;
+}
+.difficulty-card-wrapper input[type="checkbox"]:checked + .difficulty-card-label {
+  border-color: var(--sage-mid) !important;
+  background-color: var(--sage-light) !important;
+  color: var(--sage-dark) !important;
+  font-weight: 600;
+  box-shadow: 0 2px 4px rgba(45, 106, 79, 0.1);
+}
+.difficulty-card-wrapper input[type="checkbox"]:focus-visible + .difficulty-card-label {
+  outline: 2px solid var(--sage-mid);
+  outline-offset: 2px;
+}
+.difficulty-card-label:hover {
+  border-color: var(--sage-mid);
+  background-color: var(--sage-pale);
+}
+.difficulty-card-icon-checked {
+  display: none;
+}
+.difficulty-card-icon-unchecked {
+  display: inline-block;
+}
+.difficulty-card-wrapper input[type="checkbox"]:checked + .difficulty-card-label .difficulty-card-icon-checked {
+  display: inline-block;
+}
+.difficulty-card-wrapper input[type="checkbox"]:checked + .difficulty-card-label .difficulty-card-icon-unchecked {
+  display: none;
+}
+
+/* Toggle others text field visibility based on check status */
+.col:has(#diff_others_check:not(:checked)) input[name="diff_others_text"] {
+  display: none;
+}
+
+.icf-legend {
+  font-size: 12px;
+}
+.icf-legend td, .icf-legend th {
+  padding: 4px 8px;
+}
+.dynamic-row-remove {
+  cursor: pointer;
+}
+
+/* Card Accent Borders */
+.border-left-primary {
+  border-left: 4px solid var(--sage-dark) !important;
+}
+.border-left-accent {
+  border-left: 4px solid var(--sage-mid) !important;
+}
+.border-left-fern {
+  border-left: 4px solid #52B788 !important;
+}
+
+/* ── SF9 Rating Circle Pills ── */
+.sf9-rating-pill-group {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 4px;
+  justify-content: center;
+  align-items: center;
+}
+.sf9-rating-pill {
+  display: inline-block;
+}
+.sf9-rating-pill input[type="radio"] {
+  display: none;
+}
+.sf9-rating-pill label {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  min-width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 1px solid var(--sage-border);
+  background: #ffffff;
+  color: var(--sage-mid);
+  font-size: 11px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: all 150ms ease;
+  user-select: none;
+  margin-bottom: 0 !important;
+}
+.sf9-rating-pill input[type="radio"]:checked + label {
+  background-color: var(--sage-dark) !important;
+  border-color: var(--sage-dark) !important;
+  color: #ffffff !important;
+  box-shadow: 0 2px 4px rgba(45, 106, 79, 0.2);
+}
+.sf9-rating-pill label:hover {
+  background-color: var(--sage-pale);
+  border-color: var(--sage-mid);
+}
+.sf9-rating-pill input[type="radio"]:disabled + label {
+  opacity: 0.6;
+  cursor: not-allowed;
+  background-color: #f5f6fa;
+}
+
+/* ── Global Premium Micro-animations & Interactive States ── */
+.sned-card, .card, .dashboard-card {
+  transition: transform 0.3s cubic-bezier(0.165, 0.84, 0.44, 1), box-shadow 0.3s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+.sned-card:hover, .card:hover, .dashboard-card:hover {
+  transform: translateY(-3px) !important;
+  box-shadow: 0 10px 24px rgba(45, 106, 79, 0.08) !important;
+}
+
+.btn {
+  transition: all 0.2s cubic-bezier(0.165, 0.84, 0.44, 1) !important;
+}
+.btn:hover {
+  transform: translateY(-2px) !important;
+}
+.btn:active {
+  transform: translateY(0) !important;
+}
+.btn-primary:hover, .btn-success:hover, .btn-pill-primary:hover {
+  box-shadow: 0 8px 16px rgba(64, 145, 108, 0.2) !important;
+}
+.btn-danger:hover {
+  box-shadow: 0 8px 16px rgba(192, 98, 106, 0.2) !important;
+}
+
+.form-control, .form-select {
+  transition: border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease !important;
+}
+.form-control:focus, .form-select:focus {
+  transform: translateY(-1px);
+}
+
